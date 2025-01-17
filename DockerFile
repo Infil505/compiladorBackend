@@ -1,0 +1,21 @@
+# Usar una imagen base de Node.js con herramientas necesarias
+FROM node:18-bullseye
+
+# Instalar g++ para compilar C++
+RUN apt-get update && apt-get install -y g++
+
+# Crear un directorio de trabajo
+WORKDIR /app
+
+# Copiar archivos de la aplicación al contenedor
+COPY package*.json ./
+COPY ./src ./src
+
+# Instalar dependencias
+RUN npm install
+
+# Exponer el puerto
+EXPOSE 3000
+
+# Comando para iniciar la aplicación
+CMD ["node", "src/server.js"]
