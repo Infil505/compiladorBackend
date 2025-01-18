@@ -1,15 +1,39 @@
 const express = require("express");
 const { compiladorCmas } = require("../services/servicio_compilador.js");
+const { AuthService } = require("../middleware/auth.js");
 const { secure } = require("../services/restricciones.js");
+const UserController = require("../controllers/usuario_controller.js"); 
 
 const router = express.Router();
-// implementar seguridad en las rutas
-router.post("/run", async (req, res) => {
+
+const verifyToken = (req, res, next) => {
+    const token = req.header('Authorization')?.replace('Bearer ', '');
+
+    if (!token) {
+        return res.status(401).json({ message: 'No se proporcionó un token de autorización' });
+    }
+
+    try {
+        const decoded = AuthService.verifyToken(token);
+        req.user = decoded;
+        next();
+    } catch (error) {
+        res.status(401).json({ message: 'Token inválido o expirado', error });
+    }
+};
+
+router.post('/register', UserController.register);
+
+router.post('/login', UserController.login);
+
+router.get('/profile', verifyToken, UserController.profile);
+
+// rutas del compilador
+router.post("/run", verifyToken, async (req, res) => {
     const code = req.body.code;
     if (!code) {
         return res.status(400).json({ error: "Perdón, pero no has digitado código alguno para probar." });
     }
-    // Validaciones de seguridad
     if (code.includes("system(")) {
         return res.status(400).json({ error: "Espera, has intentado código no permitido." });
     }

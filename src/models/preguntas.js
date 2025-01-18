@@ -1,5 +1,5 @@
 const { Model, DataTypes } = require('sequelize');
-const sequelize = require('../sequelize.js'); 
+const sequelize = require('../config/sequelize.js'); 
 
 class Pregunta extends Model {}
 
@@ -17,7 +17,7 @@ Pregunta.init(
       type: DataTypes.ARRAY(DataTypes.STRING), 
       allowNull: false,
       validate: {
-        len: [1, 3],
+        len: [3],
       },
     },
   },
