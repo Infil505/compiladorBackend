@@ -1,4 +1,4 @@
-const UserService = require('../services/userService');
+const UserService = require('../services/user_service');
 const AuthService = require('../middleware/auth');
 
 class UserController {
@@ -19,7 +19,7 @@ class UserController {
         try {
             const user = await UserService.validateCredentials(correo, password);
             const token = AuthService.generateToken(user);
-            res.json({ message: 'Login exitoso', token });
+            res.status(200).json({ message: 'Login exitoso', token });
         } catch (error) {
             res.status(400).json({ message: error.message });
         }
@@ -34,7 +34,7 @@ class UserController {
         try {
             const decoded = AuthService.verifyToken(token); 
             req.user = decoded; 
-            res.json({ message: 'Perfil de usuario', user: req.user });
+            res.status(200).json({ message: 'Perfil de usuario', user: req.user });
         } catch (error) {
             res.status(400).json({ message: 'Token no válido o expirado' });
         }

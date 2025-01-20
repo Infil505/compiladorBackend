@@ -1,7 +1,6 @@
 const express = require("express");
 const { compiladorCmas } = require("../services/servicio_compilador.js");
 const { AuthService } = require("../middleware/auth.js");
-const { secure } = require("../services/restricciones.js");
 const UserController = require("../controllers/usuario_controller.js"); 
 
 const router = express.Router();
@@ -41,7 +40,6 @@ router.post("/run", verifyToken, async (req, res) => {
         return res.status(400).json({ error: "Disculpa, pero has superado la extensión permitida." });
     }
     try {
-        secure(code);
         const output = await compiladorCmas(code);
         res.json({ output });
     } catch (err) {

@@ -4,28 +4,36 @@ const dotenv = require('dotenv');
 dotenv.config();
 
 const JWT_SECRET = process.env.JWT_SECRET;
-const JWT_EXPIRATION = '1h'; 
+const JWT_EXPIRATION = process.env.JWT_EXPIRATION || '1h';
+
+if (!JWT_SECRET) {
+  throw new Error('Falta la variable de entorno JWT_SECRET en .env');
+}
 
 class AuthService {
-
   static generateToken(user) {
     const payload = {
       id: user.id,
-      correo: user.correo,
-      nombre: user.nombre,
       tipoUsuario: user.tipoUsuario
     };
-    return jwt.sign(payload, JWT_SECRET, { expiresIn: JWT_EXPIRATION });
+    return jwt.sign(payload, JWT_SECRET, { expiresIn: JWT_EXPIRATION, algorithm: 'HS256' });
   }
-
 
   static verifyToken(token) {
     try {
-      const decoded = jwt.verify(token, JWT_SECRET);
-      return decoded;
+      return jwt.verify(token, JWT_SECRET);
     } catch (error) {
-      throw new Error('Token inválido o expirado');
+      if (error.name === 'TokenExpiredError') {
+        throw new Error('El token ha expirado, por favor inicia sesión nuevamente');
+      } else if (error.name === 'JsonWebTokenError') {
+        throw new Error('Token inválido');
+      }
+      throw new Error('Error al verificar el token');
     }
+  }
+
+  static decodeToken(token) {
+    return jwt.decode(token, { complete: true });
   }
 }
 

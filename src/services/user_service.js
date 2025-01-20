@@ -5,9 +5,7 @@ class UserService {
     // Crear un nuevo usuario
     static async createUser({ correo, password, nombre, tipoDeUsuario }) {
         try {
-            // Encriptar la contraseña
             const hashedPassword = await bcrypt.hash(password, 10);
-
             const user = await Usuario.create({
                 correo,
                 password: hashedPassword,
