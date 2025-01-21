@@ -1,8 +1,7 @@
-const sequelize = require('../config/sequelize'); // Configuración de Sequelize
-const Usuario = require('../services/user_service'); // Modelo Usuario
-const Pregunta = require('../models/preguntas'); // Modelo Pregunta
-const { Model } = require('sequelize');
- // Modelo Usuario (sin relación con Pregunta)
+const sequelize = require('../config/sequelize'); 
+const Usuario = require('../services/user_service'); 
+const Pregunta = require('../models/preguntas'); 
+
 
 async function syncModels() {
   try {
