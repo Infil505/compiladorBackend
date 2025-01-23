@@ -22,7 +22,7 @@ class UserService {
     // Validar las credenciales del usuario
     static async validateCredentials(correo, password) {
         try {
-            const user = await Usuario.findOne({ where: { correo } });
+            const user = await Usuario.findByPk({ where: { correo } });
 
             if (!user) {
                 throw new Error('Usuario no encontrado');

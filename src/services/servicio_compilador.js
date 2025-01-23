@@ -13,7 +13,7 @@ if (!fs.existsSync(tempDir)) {
 const compiladorCmas = (code) => {
 
     if(secure(code).isvalid === false){
-        return new Promise((resolve, reject) => {
+        return new Promise((reject) => {
             reject(secure(code).message);
         });
     } else{
@@ -25,7 +25,7 @@ const compiladorCmas = (code) => {
             const dockerCommand = `docker run --rm -v "${tempDir}:/app" gcc:latest bash -c "g++ /app/temp.cpp -o /app/temp && /app/temp"`;
             // Compila y ejecuta el código
             exec(dockerCommand, (error, stdout, stderr) => {
-                // Limpia los archivos temporales para evitar almacenar innecesariamente archivos y ocupar espacio vital en el server
+                // Limpia los archivos temporales para evitar almacenar innecesariamente archivos y ocupar espacio que se necesita en el server
                 fs.unlinkSync(fileName);
                 if (fs.existsSync(executable)) fs.unlinkSync(executable);
                 if (error) {

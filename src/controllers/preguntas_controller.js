@@ -1,4 +1,4 @@
-const Pregunta = require('../models/Pregunta'); // Ajusta la ruta según tu estructura
+const Pregunta = require('../models/Pregunta'); 
 
 const preguntaController = {
   // Crear una nueva pregunta
