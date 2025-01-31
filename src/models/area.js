@@ -15,6 +15,10 @@ Area.init(
             type: DataTypes.STRING,
             allowNull: false,
         },
+        descripcion: {
+            type: DataTypes.TEXT,
+            allowNull: true,
+        }
     },
     {
         sequelize,
