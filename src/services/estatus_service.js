@@ -19,8 +19,7 @@ class EstatusService {
 
     async createEstatus(data) {
         try {
-            const newEstatus = new Estatus(data);
-            return await Estatus.create(newEstatus);
+            return await Estatus.create(data);
         } catch (error) {
             throw new Error('Error creating estatus');
         }
@@ -28,19 +27,29 @@ class EstatusService {
 
     async updateEstatus(id, data) {
         try {
-            return await Estatus.update(id, data, { new: true });
+            const [affectedRows] = await Estatus.update(data, { where: { id } });
+            if (affectedRows === 0) {
+                throw new Error('No se encontró el estatus para actualizar');
+            }
+            return await this.getEstatusById(id);
         } catch (error) {
-            throw new Error('Error updating estatus');
+            throw new Error('Error updating estatus: ' + error.message);
         }
     }
+    
 
     async deleteEstatus(id) {
         try {
-            return await Estatus.destroy(id);
+            const deletedCount = await Estatus.destroy({ where: { id } });
+            if (deletedCount === 0) {
+                throw new Error('No se encontró el estatus para eliminar');
+            }
+            return { message: 'Estatus eliminado correctamente' };
         } catch (error) {
-            throw new Error('Error deleting estatus');
+            throw new Error('Error deleting estatus: ' + error.message);
         }
     }
+    
 }
 
 module.exports = new EstatusService();

@@ -3,7 +3,7 @@ const estatusService = require('../services/estatus_service');
 class estatusController{
 
     // Get all estatus
-static async getAllEstatus  (req, res) {
+static async getAllEstatus  (res) {
     try {
         const estatus = await estatusService.getAllEstatus();
         res.status(200).json(estatus);

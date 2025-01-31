@@ -1,4 +1,3 @@
-// Modelo para la tabla intermedia TutoriaEstudiantes
 const { Model, DataTypes } = require('sequelize');
 const sequelize = require('../config/sequelize.js');
 
