@@ -4,19 +4,17 @@ const Area = require('./area');
 const Tutoria = require('./tutoria');
 const TutoriaEstudiantes = require('./tutoriaEstudiantes');
 const Asistencia = require('./asistencia');
+const Preguntas = require('./preguntas');
 
 
 // En tu archivo de relaciones
-Area.belongsToMany(Tutoria, {
-    through: 'AreaTutoria',
+Area.hasMany(Preguntas, {
     foreignKey: 'areaId',
-    otherKey: 'tutoriaId',
-        onDelete: 'CASCADE',
-    onUpdate: 'CASCADE'
-});
+    onDelete: 'CASCADE',
+    onUpdate: 'CASCADE' 
+})
 
-Tutoria.belongsToMany(Area, {
-    through: 'AreaTutoria',
+Tutoria.hasMany(Area, {
     foreignKey: 'tutoriaId',
     otherKey: 'areaId',
     onDelete: 'CASCADE',
@@ -29,7 +27,6 @@ Tutoria.belongsTo(Usuario, {
 });
 
 Usuario.hasMany(Tutoria, {
-    foreignKey: 'tutorCorreo',
     sourceKey: 'correo',
     as: 'tutoriasImpartidas',
     onDelete: 'CASCADE',
@@ -88,3 +85,4 @@ Tutoria.hasMany(Asistencia, {
 Usuario.hasMany(Asistencia, {
     foreignKey: 'estudianteCorreo'
 });
+

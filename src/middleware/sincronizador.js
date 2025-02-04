@@ -7,6 +7,7 @@ const Estatus = require('../models/estatus');
 const relaciones = require('../models/relaciones');
 const TutoriaEstudiantes = require('../models/tutoriaEstudiantes');
 const Asistencia = require('../models/asistencia');
+const RevokedToken = require('../models/token_revocados');
 
 async function syncModels() {
   try {
@@ -88,10 +89,12 @@ async function syncModels() {
       Area.create({
         nombre: 'Matemáticas',
         descripcion: 'Área enfocada en cálculos y lógica matemática.',
+        tutoriaId: tutoria1.codigo,
       }),
       Area.create({
         nombre: 'Ciencias',
         descripcion: 'Área enfocada en la exploración del mundo natural.',
+        tutoriaId: tutoria2.codigo,
       })
     ]);
 
@@ -151,6 +154,7 @@ async function syncModels() {
           'Un framework',
           'Un lenguaje de programación',
         ],
+        areaId: 2,
       }),
       Pregunta.create({
         pregunta: '¿Qué es una relación many-to-many?',
@@ -160,6 +164,7 @@ async function syncModels() {
           'Una relación uno a muchos',
           'Un tipo de base de datos',
         ],
+        areaId: 1,
       })
     ]);
 

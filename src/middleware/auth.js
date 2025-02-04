@@ -1,5 +1,6 @@
 const jwt = require('jsonwebtoken');
 const dotenv = require('dotenv');
+const RevokedToken = require('../models/token_revocados');
 
 dotenv.config();
 
@@ -11,15 +12,22 @@ if (!JWT_SECRET) {
 }
 
 class AuthService {
+  
   static generateToken(user) {
     const payload = {
-      id: user.id,
-      tipoUsuario: user.tipoUsuario
+      correo: user.correo,
+      tipoUsuario: user.tipoDeUsuario,
+      nombre: user.nombre
     };
     return jwt.sign(payload, JWT_SECRET, { expiresIn: JWT_EXPIRATION, algorithm: 'HS256' });
   }
 
-  static verifyToken(token) {
+  static async verifyToken(token) {
+    const revokedToken = await RevokedToken.findOne({ where: { token } });
+    if (revokedToken) {
+      throw new Error('Token inválido o revocado');
+    }
+
     try {
       return jwt.verify(token, JWT_SECRET);
     } catch (error) {
@@ -30,6 +38,16 @@ class AuthService {
       }
       throw new Error('Error al verificar el token');
     }
+  }
+
+  static async invalidateToken(token) {
+    const decoded = jwt.decode(token);
+    if (!decoded) throw new Error('Token inválido');
+
+    await RevokedToken.create({
+      token,
+      expiresAt: new Date(decoded.exp * 1000)
+    });
   }
 
   static decodeToken(token) {

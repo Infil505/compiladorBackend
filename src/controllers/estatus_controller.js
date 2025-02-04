@@ -1,6 +1,6 @@
 const estatusService = require('../services/estatus_service');
 
-class estatusController{
+class EstatusController{
 
     // Get all estatus
 static async getAllEstatus  (res) {
@@ -13,16 +13,29 @@ static async getAllEstatus  (res) {
 };
 
 
-// Get estatus by ID
-static async getEstatusById  (req, res)  {
+// Get estatus by UsuarioCorreo
+static async getEstatusByUsuarioCorreo(req, res) {
     try {
-        const estatus = await estatusService.getEstatusById(req.params.id);
-        if (!estatus) return res.status(404).json({ message: 'Estatus not found' });
+        const { usuarioCorreo } = req.params;
+        const estatus = await estatusService.getEstatusByUsuarioCorreo(usuarioCorreo);
+        if (!estatus) return res.status(404).json({ message: 'Estatus no encontrado para el usuario' });
         res.status(200).json(estatus);
     } catch (error) {
         res.status(500).json({ message: error.message });
     }
-};
+}
+
+// Get estatus by areaId
+static async getEstatusByAreaId(req, res) {
+    try {
+        const { areaId } = req.params;
+        const estatus = await estatusService.getEstatusByAreaId(areaId);
+        if (!estatus) return res.status(404).json({ message: 'Estatus no encontrado para el area' });
+        res.status(200).json(estatus);
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+}
 
 // Create new estatus
 static async createEstatus  (req, res)  {
@@ -58,4 +71,4 @@ static async deleteEstatus  (req, res)  {
 
 }
 
-module.exports = estatusController;
+module.exports = EstatusController;

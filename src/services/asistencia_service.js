@@ -18,11 +18,13 @@ class AsistenciaService {
         }
     }
 
-    async getAsistenciabyId (id) {
+    async getAsistenciasByCorreo(estudianteCorreo) {
         try {
-            return await Asistencia.findByPk(id);
+            return await Asistencia.findAll({
+                where: { estudianteCorreo }
+            });
         } catch (error) {
-            throw new Error('Error fetching Asistencia by id ' + id)
+            throw new Error(`Error fetching Asistencias for estudianteCorreo: ${estudianteCorreo}`);
         }
     }
 
@@ -45,7 +47,7 @@ class AsistenciaService {
                 throw new Error('No se encontro ninguna asistencia con el id: ' + id);
             }
         } catch (error) {
-            
+            throw new Error('Error deleting Asistencia ' + error.message);
         }
     }
 }
