@@ -1,8 +1,6 @@
 const tutoriaService = require('../services/tutoria_service');
 
 class TutoriaController {
-    
-    // Obtener todas las tutorías
     static async getAllTutorias(req, res) {
         try {
             const tutorias = await tutoriaService.getAllTutorias();
@@ -12,7 +10,6 @@ class TutoriaController {
         }
     }
 
-    // Obtener una tutoría por ID
     static async getTutoriaById(req, res) {
         try {
             const tutoria = await tutoriaService.getTutoriaById(req.params.id);
@@ -22,7 +19,6 @@ class TutoriaController {
         }
     }
 
-    // Crear una nueva tutoría
     static async createTutoria(req, res) {
         try {
             const newTutoria = await tutoriaService.createTutoria(req.body);
@@ -32,7 +28,6 @@ class TutoriaController {
         }
     }
 
-    // Actualizar una tutoría por ID
     static async updateTutoria(req, res) {
         try {
             const updatedTutoria = await tutoriaService.updateTutoria(req.params.id, req.body);
@@ -42,7 +37,6 @@ class TutoriaController {
         }
     }
 
-    // Eliminar una tutoría por ID
     static async deleteTutoria(req, res) {
         try {
             await tutoriaService.deleteTutoria(req.params.id);

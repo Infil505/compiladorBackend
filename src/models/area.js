@@ -18,6 +18,10 @@ Area.init(
         descripcion: {
             type: DataTypes.TEXT,
             allowNull: true,
+        },
+        nEvluacion: {
+            type: DataTypes.INTEGER,
+            allowNull: false,
         }
     },
     {

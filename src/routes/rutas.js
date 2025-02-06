@@ -4,6 +4,8 @@ const AuthService = require('../middleware/auth');
 const UserController = require("../controllers/usuario_controller.js"); 
 const AsistenciaController = require('../controllers/asistencia_controller.js');
 const EstatusController = require('../controllers/estatus_controller.js');
+const preguntaController = require('../controllers/preguntas_controller.js');
+const TutoriaController = require('../controllers/tutoria_controller.js');
 
 const router = express.Router();
 
@@ -58,11 +60,29 @@ router.put('/:id', EstatusController.updateEstatus);
 
 router.delete('/:id', EstatusController.deleteEstatus);
 
-// rutas preguntas *Revisar la relacion que hay con el area ya que se necesita dividir por tipos, posible sol una tabla de evaluaciones*
+// rutas preguntas
+router.post('/preguntas', preguntaController.crearPregunta);
 
+router.get('/preguntas/:id', preguntaController.obtenerPreguntaPorId);
+
+router.get('/preguntas/area/:area', preguntaController.obtenerPreguntasPorArea);
+
+router.get('/preguntas', preguntaController.obtenerTodasLasPreguntas);
+
+router.put('/preguntas/:id', preguntaController.actualizarPregunta);
+
+router.delete('/preguntas/:id', preguntaController.eliminarPregunta);
 
 // ruta de tutorias
+router.get('/tutorias', TutoriaController.getAllTutorias);
 
+router.get('/tutorias/:id', TutoriaController.getTutoriaById);
+
+router.post('/tutorias', TutoriaController.createTutoria);
+
+router.put('/tutorias/:id', TutoriaController.updateTutoria);
+
+router.delete('/tutorias/:id', TutoriaController.deleteTutoria);
 
 /*-------------------------------------------------------------*/
 // rutas del compilador

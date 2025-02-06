@@ -25,6 +25,22 @@ class EstatusService {
         }
     }
 
+    async getEstatusByUsuarioCorreo(usuarioCorreo) {
+        try {
+            return await Estatus.findAll({ where: { usuarioCorreo } });
+        } catch (error) {
+            throw new Error('Error fetching estatus by usuarioCorreo');
+        }
+    }
+
+    async getEstatusByAreaId(areaId) {
+        try {
+            return await Estatus.findAll({ where: { areaId } });
+        } catch (error) {
+            throw new Error('Error fetching estatus by areaId');
+        }
+    }
+
     async updateEstatus(id, data) {
         try {
             const [affectedRows] = await Estatus.update(data, { where: { id } });

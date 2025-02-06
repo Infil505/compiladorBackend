@@ -90,11 +90,13 @@ async function syncModels() {
         nombre: 'Matemáticas',
         descripcion: 'Área enfocada en cálculos y lógica matemática.',
         tutoriaId: tutoria1.codigo,
+        nEvluacion: 1,
       }),
       Area.create({
         nombre: 'Ciencias',
         descripcion: 'Área enfocada en la exploración del mundo natural.',
         tutoriaId: tutoria2.codigo,
+        nEvluacion: 1,
       })
     ]);
 

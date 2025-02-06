@@ -1,7 +1,6 @@
-const Pregunta = require('../models/Pregunta'); 
+const Pregunta = require('../services/pregunta_service'); 
 
 const preguntaController = {
-  // Crear una nueva pregunta
   async crearPregunta(req, res) {
     try {
       const { pregunta, respuestaCorrecta, respuestasIncorrectas } = req.body;
@@ -10,7 +9,7 @@ const preguntaController = {
         return res.status(400).json({ error: 'Datos inválidos. Verifica el formato y la cantidad de respuestas incorrectas.' });
       }
 
-      const nuevaPregunta = await Pregunta.create({
+      const nuevaPregunta = await Pregunta.crearPregunta({
         pregunta,
         respuestaCorrecta,
         respuestasIncorrectas,
@@ -23,12 +22,11 @@ const preguntaController = {
     }
   },
 
-  // Obtener una pregunta por ID
   async obtenerPreguntaPorId(req, res) {
     try {
       const { id } = req.params;
 
-      const pregunta = await Pregunta.findByPk(id);
+      const pregunta = await Pregunta.obtenerPreguntaPorId(id);
 
       if (!pregunta) {
         return res.status(404).json({ error: 'Pregunta no encontrada' });
@@ -41,10 +39,26 @@ const preguntaController = {
     }
   },
 
-  // Obtener todas las preguntas
-  async obtenerTodasLasPreguntas(req, res) {
+  async obtenerPreguntasPorArea(req, res) {
     try {
-      const preguntas = await Pregunta.findAll();
+      const { area } = req.params;
+
+      const preguntas = await Pregunta.obtenerPreguntasPorArea(area);
+
+      if (preguntas.length === 0) {
+        return res.status(404).json({ error: 'No se encontraron preguntas para el área especificada' });
+      }
+
+      res.status(200).json(preguntas);
+    } catch (error) {
+      console.error('Error al obtener preguntas por área:', error);
+      res.status(500).json({ error: 'Error interno del servidor' });
+    }
+  },
+
+  async obtenerTodasLasPreguntas( res) {
+    try {
+      const preguntas = await Pregunta.obtenerTodasLasPreguntas();
       res.status(200).json(preguntas);
     } catch (error) {
       console.error('Error al obtener las preguntas:', error);
@@ -52,13 +66,12 @@ const preguntaController = {
     }
   },
 
-  // Actualizar una pregunta por ID
   async actualizarPregunta(req, res) {
     try {
       const { id } = req.params;
       const { pregunta, respuestaCorrecta, respuestasIncorrectas } = req.body;
 
-      const preguntaExistente = await Pregunta.findByPk(id);
+      const preguntaExistente = await Pregunta.obtenerPreguntaPorId(id);
 
       if (!preguntaExistente) {
         return res.status(404).json({ error: 'Pregunta no encontrada' });
@@ -68,12 +81,11 @@ const preguntaController = {
         return res.status(400).json({ error: 'Datos inválidos. Verifica la cantidad de respuestas incorrectas.' });
       }
 
-      const preguntaActualizada = await preguntaExistente.update({
+      const preguntaActualizada = await Pregunta.actualizarPregunta({
         pregunta,
         respuestaCorrecta,
         respuestasIncorrectas,
       });
-
       res.status(200).json(preguntaActualizada);
     } catch (error) {
       console.error('Error al actualizar la pregunta:', error);
@@ -81,18 +93,17 @@ const preguntaController = {
     }
   },
 
-  // Eliminar una pregunta por ID
   async eliminarPregunta(req, res) {
     try {
       const { id } = req.params;
 
-      const pregunta = await Pregunta.findByPk(id);
+      const pregunta = await Pregunta.obtenerPreguntaPorId(id);
 
       if (!pregunta) {
         return res.status(404).json({ error: 'Pregunta no encontrada' });
       }
 
-      await pregunta.destroy();
+      await Pregunta.eliminarPregunta(id);
       res.status(200).json({ message: 'Pregunta eliminada exitosamente' });
     } catch (error) {
       console.error('Error al eliminar la pregunta:', error);
@@ -100,5 +111,7 @@ const preguntaController = {
     }
   },
 };
+
+// aprender procediemientos almacenados en postgres para mejorar eficiencia de las consultas a la base de datos
 
 module.exports = preguntaController;
